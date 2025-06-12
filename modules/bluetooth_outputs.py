@@ -1,26 +1,37 @@
 import subprocess
 
-class BluetoothOutput:
-    def __init__(self, adapter):
-        self.adapter = adapter
+def list_bluetooth_devices():
+    try:
+        result = subprocess.check_output("bluetoothctl devices", shell=True).decode()
+        devices = []
+        for line in result.splitlines():
+            parts = line.split()
+            if len(parts) >= 2:
+                devices.append((parts[1], " ".join(parts[2:])))
+        return devices
+    except subprocess.CalledProcessError as e:
+        print(f"[SPYNBOOX] Failed to list Bluetooth devices: {e}")
+        return []
 
-    def power_on(self):
-        subprocess.run(f"bluetoothctl --adapter={self.adapter} power on", shell=True)
+def connect_device(mac_address):
+    try:
+        subprocess.run(f"bluetoothctl connect {mac_address}", shell=True, check=True)
+        print(f"[SPYNBOOX] Connected to {mac_address}")
+    except subprocess.CalledProcessError:
+        print(f"[SPYNBOOX] Failed to connect to {mac_address}")
 
-    def power_off(self):
-        subprocess.run(f"bluetoothctl --adapter={self.adapter} power off", shell=True)
+def disconnect_device(mac_address):
+    try:
+        subprocess.run(f"bluetoothctl disconnect {mac_address}", shell=True, check=True)
+        print(f"[SPYNBOOX] Disconnected from {mac_address}")
+    except subprocess.CalledProcessError:
+        print(f"[SPYNBOOX] Failed to disconnect {mac_address}")
 
-    def pair_device(self):
-        subprocess.run(f"bluetoothctl --adapter={self.adapter} pairable on", shell=True)
-        subprocess.run(f"bluetoothctl --adapter={self.adapter} discoverable on", shell=True)
-        subprocess.run(f"bluetoothctl --adapter={self.adapter} agent NoInputNoOutput", shell=True)
-        subprocess.run(f"bluetoothctl --adapter={self.adapter} default-agent", shell=True)
-
-    def connect(self, device_mac):
-        subprocess.run(f"bluetoothctl --adapter={self.adapter} connect {device_mac}", shell=True)
-
-    def disconnect(self, device_mac):
-        subprocess.run(f"bluetoothctl --adapter={self.adapter} disconnect {device_mac}", shell=True)
-
-    def remove_device(self, device_mac):
-        subprocess.run(f"bluetoothctl --adapter={self.adapter} remove {device_mac}", shell=True)
+def pair_device(mac_address):
+    try:
+        subprocess.run(f"bluetoothctl pair {mac_address}", shell=True, check=True)
+        subprocess.run(f"bluetoothctl trust {mac_address}", shell=True, check=True)
+        subprocess.run(f"bluetoothctl connect {mac_address}", shell=True, check=True)
+        print(f"[SPYNBOOX] Paired and connected to {mac_address}")
+    except subprocess.CalledProcessError:
+        print(f"[SPYNBOOX] Failed to pair/connect to {mac_address}")
