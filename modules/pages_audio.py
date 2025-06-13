@@ -8,8 +8,8 @@ from modules.equalizer import create_equalizer_page
 from modules.play_sound import play_sound_file
 from modules.modes import create_mode_selection_page
 from modules.playback import start_playback, stop_playback, is_playing
-from modules.audio_input import get_audio_input_command  # ✅ Ajout
-from modules.pages_source_audio import SourceAudioPage  # ✅ Ajout
+from modules.audio_input import get_audio_input_command
+from modules.pages_source_audio import SourceAudioPage  # ✅ Import correct
 
 # Chemin vers le fichier test audio
 TEST_SOUND_PATH = "assets/sounds/boom.wav"
@@ -31,9 +31,9 @@ def create_audio_page(root, navigate_callback):
     playback_frame = create_frame(main_frame, bg=COLORS["background"])
     playback_frame.pack(pady=2)
 
-    # 🔘 Bouton Source Audio (navigue vers page sélection)
+    # 🔘 Bouton Source Audio (ouvre la page)
     def open_source_page():
-        SourceAudioPage(root, lambda: create_audio_page(root, navigate_callback))
+        SourceAudioPage(root, lambda: create_audio_page(root, navigate_callback))  # ✅ Corrigé
 
     # Vérification de la validité de la source
     source_info = get_audio_input_command()
@@ -148,7 +148,7 @@ def create_output_controls(parent, output_index, navigate_callback):
     ).pack(side="left", padx=2)
 
     # Mode ST/D/G
-    current_mode = "ST"  # à récupérer dynamiquement plus tard
+    current_mode = "ST"  # à rendre dynamique plus tard
     create_button(
         frame,
         text=current_mode,
