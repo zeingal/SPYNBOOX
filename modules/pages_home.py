@@ -2,7 +2,7 @@ import tkinter as tk
 from modules.pages_utils import create_button, create_label, create_frame
 from modules.widgets_config import COLORS, FONTS
 
-def create_home_page(root, navigate_callback):
+def display_home_page(root, navigate_callback):
     # Efface les widgets précédents
     for widget in root.winfo_children():
         widget.destroy()
