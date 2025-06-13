@@ -1,4 +1,3 @@
-# navigator.py
 from modules import (
     pages_home,
     pages_audio,
@@ -8,14 +7,18 @@ from modules import (
     shutdown
 )
 
-def navigate_to(page_name, root):
-    """
-    Redirige vers la page spécifiée par son nom.
-    """
+def navigate_to(page_name, root,
+                apply_theme_callback=None,
+                set_brightness_callback=None,
+                set_manual_time=None,
+                auto_sync_time=None,
+                update_system=None,
+                shutdown_device=None):
+
     page_name = page_name.lower()
-    
+
     if page_name == "home":
-        pages_home.display_home_page(root)
+        pages_home.display_home_page(root, navigate_to)
     elif page_name == "audio":
         pages_audio.create_audio_page(root, navigate_to)
     elif page_name == "equalizer":
@@ -23,13 +26,16 @@ def navigate_to(page_name, root):
     elif page_name == "bluetooth":
         pages_bluetooth.create_bluetooth_page(root, navigate_to)
     elif page_name == "settings":
-        pages_settings.create_settings_page(root, navigate_to,
-                                            apply_theme_callback=None,
-                                            set_brightness_callback=None,
-                                            set_manual_time=None,
-                                            auto_sync_time=None,
-                                            update_system=None,
-                                            shutdown_device=None)
+        pages_settings.create_settings_page(
+            root,
+            navigate_to,
+            apply_theme_callback,
+            set_brightness_callback,
+            set_manual_time,
+            auto_sync_time,
+            update_system,
+            shutdown_device
+        )
     elif page_name == "shutdown":
         shutdown.shutdown_device()
     else:
