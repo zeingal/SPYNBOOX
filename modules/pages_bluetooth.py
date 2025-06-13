@@ -10,22 +10,33 @@ def create_bluetooth_page(root, navigate_callback):
     frame = create_frame(root, bg=COLORS["background"])
     frame.pack(expand=True, fill="both")
 
-    create_label(frame, text="🔵 Appairage Bluetooth", font=FONTS["title"], fg=COLORS["accent"], bg=COLORS["background"]).pack(pady=10)
+    # Titre compact
+    create_label(
+        frame,
+        text="🔵 Appairage BT",
+        font=FONTS["title"],
+        fg=COLORS["accent"],
+        bg=COLORS["background"]
+    ).pack(pady=5)
 
-    device_frame = create_frame(frame, bg=COLORS["background"])
-    device_frame.pack(pady=10)
-
-    # Dropdown sélection de sortie
+    # Menu de sélection de sortie
     selected_output = tk.StringVar(value="1")
     outputs = ["1", "2", "3"]
-
     output_menu = tk.OptionMenu(frame, selected_output, *outputs)
-    output_menu.config(font=FONTS["label"])
-    output_menu.pack(pady=5)
+    output_menu.config(font=FONTS["small"])
+    output_menu.pack(pady=2)
 
-    device_listbox = tk.Listbox(device_frame, font=FONTS["label"], width=40, height=10)
-    device_listbox.pack(pady=5)
+    # Liste des appareils détectés
+    device_listbox = tk.Listbox(
+        frame,
+        font=FONTS["tiny"],
+        width=30,
+        height=5,
+        selectmode=tk.SINGLE
+    )
+    device_listbox.pack(pady=2)
 
+    # Fonctions de scan et appairage
     def refresh_devices():
         device_listbox.delete(0, tk.END)
         nearby = list_nearby_devices()
@@ -39,8 +50,33 @@ def create_bluetooth_page(root, navigate_callback):
             mac = device_info.split("(")[-1].replace(")", "").strip()
             pair_device_to_output(mac, int(selected_output.get()))
 
-    create_button(frame, text="🔍 Rechercher", command=refresh_devices, font=FONTS["button"], bg=COLORS["accent"], fg=COLORS["button_text"]).pack(pady=5)
+    # Boutons en ligne
+    btn_frame = create_frame(frame, bg=COLORS["background"])
+    btn_frame.pack(pady=5)
 
-    create_button(frame, text="🔗 Appairer", command=pair_selected, font=FONTS["button"], bg=COLORS["accent"], fg=COLORS["button_text"]).pack(pady=5)
+    create_button(
+        btn_frame,
+        text="🔍",
+        command=refresh_devices,
+        font=FONTS["icon"],
+        bg=COLORS["accent"],
+        fg=COLORS["button_text"]
+    ).pack(side="left", padx=4)
 
-    create_button(frame, text="⬅️ Retour", command=lambda: navigate_callback("home"), font=FONTS["button"], bg=COLORS["return"], fg=COLORS["button_text"]).pack(pady=15)
+    create_button(
+        btn_frame,
+        text="🔗",
+        command=pair_selected,
+        font=FONTS["icon"],
+        bg=COLORS["accent"],
+        fg=COLORS["button_text"]
+    ).pack(side="left", padx=4)
+
+    create_button(
+        btn_frame,
+        text="⬅️",
+        command=lambda: navigate_callback("home"),
+        font=FONTS["icon"],
+        bg=COLORS["return"],
+        fg=COLORS["button_text"]
+    ).pack(side="left", padx=4)
