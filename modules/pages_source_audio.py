@@ -6,7 +6,7 @@ import json
 import os
 
 from modules.widgets_config import FONT_TITRE, FONT_STANDARD, COULEUR_FOND, COULEUR_BOUTON, COULEUR_TEXTE
-from modules.pages_utils import create_title_label, create_button, create_separator, create_status_label
+from modules.pages_utils import create_title_label, create_button, create_separator
 from modules.config_manager import load_config, save_config
 
 AUDIO_SOURCES = [
@@ -18,9 +18,9 @@ AUDIO_SOURCES = [
 ]
 
 class SourceAudioPage:
-    def __init__(self, root, show_home_callback):
+    def __init__(self, root, show_audio_callback):
         self.root = root
-        self.show_home_callback = show_home_callback
+        self.show_audio_callback = show_audio_callback
         self.widgets = []
         self.current_source = None
         self.config = load_config()
@@ -64,7 +64,7 @@ class SourceAudioPage:
 
         create_separator(self.frame).pack(pady=5)
 
-        btn_retour = create_button(self.frame, "Retour", self.show_home_callback)
+        btn_retour = create_button(self.frame, "⬅️ Retour", self.show_audio_callback)
         btn_retour.pack(pady=5)
         self.widgets.append(btn_retour)
 
