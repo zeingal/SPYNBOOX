@@ -8,6 +8,8 @@ from modules.equalizer import create_equalizer_page
 from modules.play_sound import play_sound_file
 from modules.modes import create_mode_selection_page
 from modules.playback import start_playback, stop_playback, is_playing
+from modules.audio_input import get_audio_input_command  # ✅ Ajout
+from modules.pages_source_audio import SourceAudioPage  # ✅ Ajout
 
 # Chemin vers le fichier test audio
 TEST_SOUND_PATH = "assets/sounds/boom.wav"
@@ -29,6 +31,26 @@ def create_audio_page(root, navigate_callback):
     playback_frame = create_frame(main_frame, bg=COLORS["background"])
     playback_frame.pack(pady=2)
 
+    # 🔘 Bouton Source Audio (navigue vers page sélection)
+    def open_source_page():
+        SourceAudioPage(root, lambda: create_audio_page(root, navigate_callback))
+
+    # Vérification de la validité de la source
+    source_info = get_audio_input_command()
+    valid = source_info["type"] in ("file", "stream")
+    source_color = "green" if valid else "red"
+
+    btn_source = create_button(
+        playback_frame,
+        text="🎧 Source",
+        command=open_source_page,
+        bg=source_color,
+        fg="white",
+        font=FONTS["button"]
+    )
+    btn_source.pack(side="left", padx=5)
+
+    # ▶️ Lecture
     btn_play = create_button(
         playback_frame,
         text="▶️ Lecture",
@@ -56,6 +78,7 @@ def create_audio_page(root, navigate_callback):
     vumeter.set(0)
     vumeter.pack(side="left", padx=5)
 
+    # ⏹️ Stop
     btn_stop = create_button(
         playback_frame,
         text="⏹️ Stop",
