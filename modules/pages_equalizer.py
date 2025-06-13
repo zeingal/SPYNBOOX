@@ -3,7 +3,6 @@ from modules.pages_utils import create_button, create_label, create_frame, creat
 from modules.widgets_config import COLORS, FONTS
 from modules.equalizer import set_equalizer, reset_equalizer
 
-# Dictionnaire global pour stocker les valeurs des sliders
 equalizer_values = {
     "bass": 0,
     "mid": 0,
@@ -15,7 +14,7 @@ def create_equalizer_page(root, navigate_callback):
         widget.destroy()
 
     main_frame = create_frame(root, bg=COLORS["background"])
-    main_frame.pack(expand=True, fill="both")
+    main_frame.pack(expand=True, fill="both", padx=5, pady=5)
 
     create_label(
         main_frame,
@@ -23,41 +22,36 @@ def create_equalizer_page(root, navigate_callback):
         font=FONTS["title"],
         fg=COLORS["accent"],
         bg=COLORS["background"]
-    ).pack(pady=10)
+    ).pack(pady=5)
 
-    # Sous-cadre sliders
     sliders_frame = create_frame(main_frame, bg=COLORS["background"])
-    sliders_frame.pack(pady=10)
+    sliders_frame.pack(pady=5)
 
     def on_slider_change(name, value):
         equalizer_values[name] = int(float(value))
         set_equalizer(**equalizer_values)
 
-    # Basses
-    create_label(sliders_frame, text="Basses", font=FONTS["label"], bg=COLORS["background"]).pack()
-    bass_slider = create_slider(sliders_frame, from_=-10, to=10, initial=0, command=lambda v: on_slider_change("bass", v))
-    bass_slider.pack(pady=5)
+    # Slider compact avec label centré
+    for name, label_text in [("bass", "Basses"), ("mid", "Médiums"), ("treble", "Aigus")]:
+        create_label(sliders_frame, text=label_text, font=FONTS["label"], bg=COLORS["background"]).pack(pady=1)
+        slider = create_slider(
+            sliders_frame, from_=-10, to=10, initial=0,
+            command=lambda v, n=name: on_slider_change(n, v),
+            width=200  # réduit pour écran étroit
+        )
+        slider.pack(pady=2)
 
-    # Médiums
-    create_label(sliders_frame, text="Médiums", font=FONTS["label"], bg=COLORS["background"]).pack()
-    mid_slider = create_slider(sliders_frame, from_=-10, to=10, initial=0, command=lambda v: on_slider_change("mid", v))
-    mid_slider.pack(pady=5)
-
-    # Aigus
-    create_label(sliders_frame, text="Aigus", font=FONTS["label"], bg=COLORS["background"]).pack()
-    treble_slider = create_slider(sliders_frame, from_=-10, to=10, initial=0, command=lambda v: on_slider_change("treble", v))
-    treble_slider.pack(pady=5)
-
-    # Boutons
+    # Réinitialiser
     create_button(
         main_frame,
         text="🔁 Réinitialiser",
-        command=lambda: reset_all_sliders(bass_slider, mid_slider, treble_slider),
+        command=lambda: reset_all_sliders(sliders_frame),
         bg=COLORS["accent"],
         fg=COLORS["button_text"],
         font=FONTS["button"]
-    ).pack(pady=15)
+    ).pack(pady=5)
 
+    # Retour
     create_button(
         main_frame,
         text="⬅️ Retour",
@@ -65,10 +59,11 @@ def create_equalizer_page(root, navigate_callback):
         bg=COLORS["return"],
         fg=COLORS["button_text"],
         font=FONTS["button"]
-    ).pack(pady=10)
+    ).pack(pady=5)
 
-def reset_all_sliders(bass_slider, mid_slider, treble_slider):
-    bass_slider.set(0)
-    mid_slider.set(0)
-    treble_slider.set(0)
+def reset_all_sliders(frame):
+    sliders = frame.winfo_children()
+    for widget in sliders:
+        if isinstance(widget, tk.Scale):
+            widget.set(0)
     reset_equalizer()
