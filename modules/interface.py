@@ -3,8 +3,11 @@ from modules import (
     start_animation,
     theme_manager,
     display,
+    pages_home,
     toast,
     navigator,
+    system,
+    rtc
 )
 from modules.logger import setup_logger
 
@@ -24,18 +27,29 @@ def run_app():
         # Application du thème
         theme_manager.apply_theme(root)
 
-        # Réglage initial de la luminosité
+        # Luminosité initiale
         display.set_brightness_from_config()
 
-        # Fonction de démarrage après l’animation
+        # Lancement après animation
         def launch_main_page():
             logger.info("[SPYNBOOX] Chargement de la page d'accueil")
-            navigator.navigate_to("home", root)
+            pages_home.display_home_page(root, navigate_callback)
 
-        # Animation de démarrage
+        # Navigation avec hooks
+        def navigate_callback(page_name):
+            navigator.navigate_to(
+                page_name,
+                root,
+                apply_theme_callback=theme_manager.apply_theme,
+                set_brightness_callback=display.set_brightness,
+                set_manual_time=rtc.set_manual_time,
+                auto_sync_time=rtc.auto_sync_time,
+                update_system=system.update_system,
+                shutdown_device=system.shutdown_device
+            )
+
+        # Animation + lancement
         start_animation.play_start_animation(root, launch_main_page)
-
-        # Boucle principale
         root.mainloop()
 
     except Exception as e:
