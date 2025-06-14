@@ -1,26 +1,25 @@
-import subprocess
-import json
+# modules/stream_router.py
 
-CONFIG_PATH = "config/config.json"
+import subprocess
+from modules.config import load_config
+
 TEST_AUDIO_PATH = "assets/sounds/test_audio.wav"
 
 def get_output_modes():
-    try:
-        with open(CONFIG_PATH, "r") as f:
-            config = json.load(f)
-        return {
-            1: config.get("output_1_mode", "ST"),
-            2: config.get("output_2_mode", "ST"),
-            3: config.get("output_3_mode", "ST")
-        }
-    except Exception as e:
-        print(f"[SPYNBOOX][ERROR] Unable to read config: {e}")
-        return {1: "ST", 2: "ST", 3: "ST"}
+    config = load_config()
+    bt_outputs = config.get("bluetooth_outputs", {})
+
+    return {
+        1: bt_outputs.get("output1", {}).get("mode", "stereo"),
+        2: bt_outputs.get("output2", {}).get("mode", "stereo"),
+        3: bt_outputs.get("output3", {}).get("mode", "stereo")
+    }
 
 def get_pan_filter(mode):
-    if mode == "G":
+    mode = mode.lower()
+    if mode == "gauche" or mode == "g":
         return "pan=stereo|c0=FL|c1=FL"
-    elif mode == "D":
+    elif mode == "droite" or mode == "d":
         return "pan=stereo|c0=FR|c1=FR"
     else:
         return "pan=stereo|c0=FL|c1=FR"
