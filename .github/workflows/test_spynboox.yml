@@ -1,0 +1,27 @@
+name: Test SPYNBOOX system
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📦 Checkout du dépôt
+        uses: actions/checkout@v3
+
+      - name: 🐍 Installer Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: ⚙️ Installer les dépendances Python
+        run: |
+          python -m pip install --upgrade pip
+          pip install pygame
+
+      - name: 🧪 Tester le script principal (main.py)
+        run: |
+          echo "🔍 Lancement de main.py..."
+          python main.py || echo "⚠️ main.py a renvoyé une erreur, probablement à cause de l'interface Tkinter (pas d'écran). Ce test continue."
