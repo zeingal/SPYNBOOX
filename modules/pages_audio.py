@@ -1,6 +1,5 @@
 import tkinter as tk
 import random
-
 from modules.pages_utils import create_label, create_button, create_slider, create_frame
 from modules.widgets_config import COLORS, FONTS
 from modules.bluetooth_outputs import is_output_connected, pair_device_to_output
@@ -9,9 +8,9 @@ from modules.play_sound import play_sound_file
 from modules.modes import create_mode_selection_page
 from modules.playback import start_playback, stop_playback, is_playing
 from modules.audio_input import get_audio_input_command
-from modules.pages_source_audio import SourceAudioPage  # ✅ Import correct
+from modules.pages_source_audio import SourceAudioPage
+from modules.config_manager import load_config
 
-# Chemin vers le fichier test audio
 TEST_SOUND_PATH = "assets/sounds/boom.wav"
 
 def create_audio_page(root, navigate_callback):
@@ -21,47 +20,40 @@ def create_audio_page(root, navigate_callback):
     main_frame = create_frame(root, bg=COLORS["background"])
     main_frame.pack(expand=True, fill="both")
 
-    # Titre
     create_label(
         main_frame, text="🎛️ Contrôle Audio", font=FONTS["title"],
         fg=COLORS["accent"], bg=COLORS["background"]
     ).pack(pady=5)
 
-    # 🎧 Zone Playback avec Vu-mètre
+    # Playback zone
     playback_frame = create_frame(main_frame, bg=COLORS["background"])
     playback_frame.pack(pady=2)
 
-    # 🔘 Bouton Source Audio (ouvre la page)
     def open_source_page():
-        SourceAudioPage(root, lambda: create_audio_page(root, navigate_callback))  # ✅ Corrigé
+        SourceAudioPage(root, lambda: create_audio_page(root, navigate_callback))
 
-    # Vérification de la validité de la source
     source_info = get_audio_input_command()
     valid = source_info["type"] in ("file", "stream")
     source_color = "green" if valid else "red"
 
-    btn_source = create_button(
+    create_button(
         playback_frame,
         text="🎧 Source",
         command=open_source_page,
         bg=source_color,
         fg="white",
         font=FONTS["button"]
-    )
-    btn_source.pack(side="left", padx=5)
+    ).pack(side="left", padx=5)
 
-    # ▶️ Lecture
-    btn_play = create_button(
+    create_button(
         playback_frame,
         text="▶️ Lecture",
         command=start_playback,
         bg=COLORS["button"],
         fg=COLORS["button_text"],
         font=FONTS["button"]
-    )
-    btn_play.pack(side="left", padx=5)
+    ).pack(side="left", padx=5)
 
-    # 🎚 Vu-mètre simplifié
     vumeter = tk.Scale(
         playback_frame,
         from_=0,
@@ -78,33 +70,27 @@ def create_audio_page(root, navigate_callback):
     vumeter.set(0)
     vumeter.pack(side="left", padx=5)
 
-    # ⏹️ Stop
-    btn_stop = create_button(
+    create_button(
         playback_frame,
         text="⏹️ Stop",
         command=lambda: [stop_playback(), vumeter.set(0)],
         bg=COLORS["button"],
         fg=COLORS["button_text"],
         font=FONTS["button"]
-    )
-    btn_stop.pack(side="left", padx=5)
+    ).pack(side="left", padx=5)
 
-    # 🔁 Animation Vu-mètre
     def update_vumeter():
         if is_playing():
-            level = random.randint(20, 100)
-            vumeter.set(level)
+            vumeter.set(random.randint(20, 100))
         else:
             vumeter.set(0)
         root.after(200, update_vumeter)
 
     update_vumeter()
 
-    # 🔈 Contrôles sorties BT
     for output_index in range(1, 4):
         create_output_controls(main_frame, output_index, navigate_callback)
 
-    # ⬅️ Retour
     create_button(
         main_frame, text="⬅️ Retour", command=lambda: navigate_callback("home"),
         bg=COLORS["return"], fg=COLORS["button_text"], font=FONTS["button"]
@@ -114,7 +100,6 @@ def create_output_controls(parent, output_index, navigate_callback):
     frame = create_frame(parent, bg=COLORS["background"])
     frame.pack(pady=5, fill="x", padx=5)
 
-    # Appairage
     connected = is_output_connected(output_index)
     pair_color = "green" if connected else "red"
     create_button(
@@ -127,7 +112,6 @@ def create_output_controls(parent, output_index, navigate_callback):
         command=lambda: pair_device_to_output(output_index)
     ).pack(side="left", padx=2)
 
-    # Volume slider
     create_slider(
         frame,
         from_=0,
@@ -137,7 +121,6 @@ def create_output_controls(parent, output_index, navigate_callback):
         length=100
     ).pack(side="left", padx=5)
 
-    # EQ button
     create_button(
         frame,
         text="🎚 EQ",
@@ -147,18 +130,19 @@ def create_output_controls(parent, output_index, navigate_callback):
         font=FONTS["mini"]
     ).pack(side="left", padx=2)
 
-    # Mode ST/D/G
-    current_mode = "ST"  # à rendre dynamique plus tard
+    # === Bouton Mode ST/D/G dynamique ===
+    config = load_config()
+    mode = config.get("bluetooth_outputs", {}).get(f"output{output_index}", {}).get("mode", "ST").upper()
+
     create_button(
         frame,
-        text=current_mode,
+        text=mode,
         command=lambda: create_mode_selection_page(parent, navigate_callback, output_index),
         bg=COLORS["button"],
         fg=COLORS["button_text"],
         font=FONTS["mini"]
     ).pack(side="left", padx=2)
 
-    # Test
     create_button(
         frame,
         text="🧪 Test",
