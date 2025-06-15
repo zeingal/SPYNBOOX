@@ -1,57 +1,62 @@
-# modules/modes.py
-
 import tkinter as tk
-from modules.pages_utils import create_label, create_button, create_frame
+import json
+import os
+
 from modules.widgets_config import COLORS, FONTS
+from modules.pages_utils import create_frame, create_label, create_button
 from modules.config_manager import load_config, save_config
 
 def create_mode_selection_page(root, navigate_callback, output_index):
-    config = load_config()
-    output_key = f"output{output_index}"
-
-    # Efface les widgets précédents
     for widget in root.winfo_children():
         widget.destroy()
 
-    # Cadre principal
-    frame = create_frame(root, bg=COLORS["background"])
+    frame = create_frame(root)
     frame.pack(expand=True, fill="both")
 
+    # Titre
     create_label(
         frame,
-        text=f"🎚️ Mode de sortie {output_index}",
+        text=f"🔊 Sortie {output_index} – Mode audio",
         font=FONTS["title"],
         fg=COLORS["accent"],
         bg=COLORS["background"]
     ).pack(pady=10)
 
-    # Options disponibles
-    MODES = {
-        "stereo": "🔊 Stéréo",
-        "left": "🔈 Gauche",
-        "right": "🔈 Droite"
-    }
+    # Récupérer le mode actuel
+    config = load_config()
+    current_mode = config.get("outputs", {}).get(str(output_index), {}).get("mode", "ST")
 
-    def select_mode(mode):
-        config["bluetooth_outputs"][output_key]["mode"] = mode
+    # Fonction de sauvegarde
+    def set_mode(mode):
+        if "outputs" not in config:
+            config["outputs"] = {}
+        if str(output_index) not in config["outputs"]:
+            config["outputs"][str(output_index)] = {}
+
+        config["outputs"][str(output_index)]["mode"] = mode
         save_config(config)
-        navigate_callback("audio")  # Revenir à la page audio
+        navigate_callback("audio")  # Retour à la page audio
 
-    # Crée un bouton pour chaque mode
-    for mode_key, mode_label in MODES.items():
+    # Boutons de sélection
+    btn_frame = create_frame(frame)
+    btn_frame.pack(pady=10)
+
+    for mode, label in [("ST", "Stéréo"), ("G", "Gauche"), ("D", "Droite")]:
+        color = COLORS["accent"] if mode == current_mode else COLORS["button"]
         create_button(
-            frame,
-            text=mode_label,
-            command=lambda m=mode_key: select_mode(m),
-            bg=COLORS["button"],
+            btn_frame,
+            text=label,
+            command=lambda m=mode: set_mode(m),
+            bg=color,
             fg=COLORS["button_text"],
-            font=FONTS["button"]
+            font=FONTS["button"],
+            width=10
         ).pack(pady=5)
 
-    # Bouton retour
+    # Bouton retour sans changement
     create_button(
         frame,
-        text="⬅️ Retour",
+        text="Retour",
         command=lambda: navigate_callback("audio"),
         bg=COLORS["return"],
         fg=COLORS["button_text"],
