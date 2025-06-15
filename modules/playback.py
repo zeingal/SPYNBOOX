@@ -1,70 +1,63 @@
-# modules/playback.py
-
 import subprocess
+import json
 import os
-import signal
 
-from modules.audio_input import get_audio_input_command
-from modules.config_manager import load_config
+# Dictionnaire pour stocker les processus de lecture en cours par sortie
+playback_processes = {}
 
-playback_process = None  # process global pour arrêt facile
+# Charger la config
+def load_config():
+    config_path = "config/config.json"
+    if os.path.exists(config_path):
+        with open(config_path, "r") as f:
+            return json.load(f)
+    return {}
 
+# Démarrer la lecture sur toutes les sorties configurées
 def start_playback():
-    global playback_process
-
-    # Si une lecture est déjà en cours, on la stoppe
-    if playback_process and playback_process.poll() is None:
-        stop_playback()
-
-    # Obtenir la source sélectionnée
-    source_info = get_audio_input_command()
-    if source_info["type"] == "error":
-        print("Erreur source audio :", source_info["message"])
-        return
-    elif source_info["type"] == "unsupported":
-        print("Source non prise en charge :", source_info["message"])
-        return
-
-    # Obtenir config des sorties BT
+    stop_playback()  # Stopper d'abord les anciennes lectures
     config = load_config()
-    sorties = config.get("bluetooth_outputs", {})
-    active_outputs = [key for key, val in sorties.items() if val.get("enabled")]
 
-    if not active_outputs:
-        print("Aucune sortie Bluetooth active.")
-        return
+    source_config = config.get("audio_input", {})
+    source_type = source_config.get("source", "Bluetooth (entrée)")
+    filepath = source_config.get("filepath", "")
 
-    # Commande de base selon type
-    if source_info["type"] == "file":
-        filepath = source_info["filepath"]
-        # Lecture avec ffmpeg et redirection vers bluealsa ou autre
-        command = [
-            "ffmpeg", "-re", "-i", filepath,
-            "-f", "wav", "-"
-        ]
-    elif source_info["type"] == "stream":
-        # Commande arecord ou autre
-        command = source_info["command"].split()
+    # Choisir le flux audio selon la source
+    if source_type == "Fichier local" and filepath:
+        input_cmd = ["-i", filepath]
+    else:
+        # Exemple pour Bluetooth (entrée) – à adapter si flux audio réel
+        input_cmd = ["-f", "pulse", "-i", "bluez_source"]
 
-    # Exemple : redirection via pipe à venir
-    # Pour le moment : test avec simple lecture stdout
-    print("Démarrage lecture :", " ".join(command))
+    for output_index in range(1, 4):
+        mode = config.get("outputs", {}).get(str(output_index), {}).get("mode", "ST")
+        output_device = f"bluealsa:DEV=XX:XX:XX:XX:XX:{output_index}"  # à adapter avec l’adresse réelle
 
-    try:
-        playback_process = subprocess.Popen(command, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    except Exception as e:
-        print("Erreur lancement playback :", e)
+        # Filtre audio selon le mode sélectionné
+        if mode == "G":
+            audio_filter = "pan=mono|c0=FL"
+        elif mode == "D":
+            audio_filter = "pan=mono|c0=FR"
+        else:
+            audio_filter = None  # stéréo
 
+        # Commande ffmpeg
+        cmd = ["ffmpeg"] + input_cmd
+        if audio_filter:
+            cmd += ["-af", audio_filter]
+        cmd += ["-f", "wav", output_device]
+
+        # Lancer le processus ffmpeg
+        process = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        playback_processes[output_index] = process
+
+# Stopper toutes les lectures
 def stop_playback():
-    global playback_process
-    if playback_process and playback_process.poll() is None:
-        playback_process.terminate()
-        try:
-            playback_process.wait(timeout=3)
-        except subprocess.TimeoutExpired:
-            playback_process.kill()
-    playback_process = None
+    for process in playback_processes.values():
+        if process and process.poll() is None:
+            process.terminate()
+    playback_processes.clear()
 
+# Vérifier si une lecture est en cours
 def is_playing():
-    global playback_process
-    return playback_process is not None and playback_process.poll() is None
+    return any(proc.poll() is None for proc in playback_processes.values())
