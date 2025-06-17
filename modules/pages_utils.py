@@ -73,3 +73,20 @@ def create_frame(parent, padding=10):
 # === Bouton Retour standard ===
 def create_back_button(parent, command=None):
     return create_button(parent, "Retour", command=command, width=10)
+
+# === Slider simple sans étiquette ===
+def create_slider(parent, from_=0, to=100, command=None, orient=tk.HORIZONTAL):
+    slider = tk.Scale(
+        parent,
+        from_=from_,
+        to=to,
+        orient=orient,
+        length=SLIDER_LENGTH,
+        fg=COLOR_LABEL,
+        bg=COLOR_BACKGROUND,
+        troughcolor="#DDDDDD",
+        activebackground=COLOR_SLIDER,
+        font=FONT_DEFAULT,
+        command=command
+    )
+    return slider
