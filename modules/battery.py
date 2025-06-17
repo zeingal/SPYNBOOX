@@ -8,7 +8,7 @@ except ImportError:
 
 SHUNT_OHMS = 0.1
 
-def read_battery_level():
+def get_battery_level():
     """Retourne la tension de la batterie si le module est disponible."""
     if not INA_AVAILABLE:
         return None
