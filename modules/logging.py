@@ -16,3 +16,7 @@ def log_error(error: Exception):
     error_entry = f"[{timestamp}] [ERROR] {type(error).__name__}: {error}\n"
     with open(LOG_FILE, "a") as file:
         file.write(error_entry)
+
+def log(message: str):
+    """Alias générique pour les modules SPYNBOOX"""
+    log_event(message)
