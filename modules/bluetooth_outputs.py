@@ -45,3 +45,30 @@ def is_output_connected(mac_address):
 
 def pair_device_to_output(mac_address):
     pair_device(mac_address)
+
+
+import subprocess
+import time
+
+def list_nearby_devices(timeout=8):
+    """
+    Scanne les périphériques Bluetooth à proximité.
+    Retourne une liste de tuples (adresse, nom).
+    """
+    try:
+        subprocess.run(["bluetoothctl", "scan", "on"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        time.sleep(timeout)
+        output = subprocess.check_output(["bluetoothctl", "devices"]).decode()
+        subprocess.run(["bluetoothctl", "scan", "off"], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        devices = []
+        for line in output.splitlines():
+            parts = line.strip().split(" ", 2)
+            if len(parts) == 3:
+                _, address, name = parts
+                devices.append((address, name))
+        return devices
+
+    except Exception as e:
+        print(f"[ERREUR] Scan Bluetooth échoué : {e}")
+        return []
