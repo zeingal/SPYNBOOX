@@ -1,5 +1,4 @@
 import subprocess
-from modules.bluetooth_config import BLUETOOTH_DEVICES
 
 def list_bluetooth_devices():
     try:
@@ -26,7 +25,7 @@ def disconnect_device(mac_address):
         subprocess.run(f"bluetoothctl disconnect {mac_address}", shell=True, check=True)
         print(f"[SPYNBOOX] Disconnected from {mac_address}")
     except subprocess.CalledProcessError:
-        print(f"[SPYNBOOX] Failed to disconnect {mac_address}")
+        print(f"[SPYNBOOX] Failed to disconnect from {mac_address}")
 
 def pair_device(mac_address):
     try:
@@ -38,13 +37,11 @@ def pair_device(mac_address):
         print(f"[SPYNBOOX] Failed to pair/connect to {mac_address}")
 
 def is_output_connected(mac_address):
-    """
-    Vérifie si un périphérique Bluetooth est connecté à partir de son adresse MAC.
-    Retourne True si connecté, False sinon.
-    """
     try:
-        result = subprocess.check_output(f"bluetoothctl info {mac_address}", shell=True).decode()
-        return "Connected: yes" in result
-    except Exception as e:
-        print(f"[SPYNBOOX] Échec de vérification pour {mac_address} : {e}")
+        result = subprocess.check_output("bluetoothctl info", shell=True).decode()
+        return f"Device {mac_address}" in result and "Connected: yes" in result
+    except subprocess.CalledProcessError:
         return False
+
+def pair_device_to_output(mac_address):
+    pair_device(mac_address)
