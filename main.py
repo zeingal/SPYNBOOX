@@ -8,10 +8,9 @@ from modules.logger import setup_logger
 from modules.config import load_global_config
 from modules.rtc import init_rtc_module
 from modules.battery import check_battery_status
-from modules.update_checker import is_update_available
 from modules.update_checker import get_remote_version, is_update_available
 
-# Initialisation du système de log
+# === Initialisation du système de log ===
 logger = setup_logger()
 
 def main():
@@ -22,19 +21,19 @@ def main():
         config = load_global_config()
         logger.info("Configuration chargée.")
 
-      # === Journaliser les versions locale et distante ===
-local_version = config.get("version", "0.0.0")
-remote_version = get_remote_version()
+        # === Journaliser les versions locale et distante ===
+        local_version = config.get("version", "0.0.0")
+        remote_version = get_remote_version()
 
-logger.info(f"[SPYNBOOX] Version locale détectée : {local_version}")
-if remote_version:
-    logger.info(f"[SPYNBOOX] Version distante récupérée : {remote_version}")
-    if remote_version != local_version:
-        logger.warning("[SPYNBOOX] Une mise à jour est disponible !")
-    else:
-        logger.info("[SPYNBOOX] Aucune mise à jour disponible.")
-else:
-    logger.warning("[SPYNBOOX] Impossible de récupérer la version distante.")  
+        logger.info(f"[SPYNBOOX] Version locale détectée : {local_version}")
+        if remote_version:
+            logger.info(f"[SPYNBOOX] Version distante récupérée : {remote_version}")
+            if remote_version != local_version:
+                logger.warning("[SPYNBOOX] Une mise à jour est disponible !")
+            else:
+                logger.info("[SPYNBOOX] Aucune mise à jour disponible.")
+        else:
+            logger.warning("[SPYNBOOX] Impossible de récupérer la version distante.")
 
         # Initialiser le module RTC si présent
         init_rtc_module()
@@ -42,15 +41,15 @@ else:
         # Vérifier l'état de la batterie
         check_battery_status()
 
-        # Vérifier les mises à jour (console + popup)
+        # Vérifier les mises à jour (popup graphique)
         try:
             if is_update_available():
-                logger.warning("[SPYNBOOX] Une mise à jour est disponible ! Consultez les options.")
+                logger.warning("[SPYNBOOX] Une mise à jour est disponible ! Consultez GitHub.")
 
                 # Affichage d'une alerte graphique
                 root = tk.Tk()
-                root.withdraw()
-                messagebox.showinfo("Mise à jour disponible", "Une nouvelle version de SPYNBOOX est prête !")
+                root.withdraw()  # Ne pas afficher la fenêtre principale
+                messagebox.showinfo("Mise à jour disponible", "Une nouvelle version de SPYNBOOX est disponible.")
                 root.destroy()
             else:
                 logger.info("[SPYNBOOX] Aucune mise à jour disponible.")
