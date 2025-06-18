@@ -1,20 +1,14 @@
 # Configuration des périphériques Bluetooth
 
-# Appareils déjà connus (nom : adresse MAC)
 BLUETOOTH_DEVICES = {
-    "Sortie1": "00:11:22:33:44:55",
-    "Sortie2": "11:22:33:44:55:66",
-    "Sortie3": "22:33:44:55:66:77"
+    "Sortie1": "8C:90:2D:A1:40:70",  # USB 3.0 gauche
+    "Sortie2": "8C:90:2D:A1:4B:76",  # USB 3.0 droite
+    "Sortie3": "8C:90:2D:A1:16:81",  # USB 2.0 (port 3)
 }
 
-# Nom générique à afficher si inconnu
+BLUETOOTH_SOURCE_MAC = "8C:90:2D:A1:49:E2"  # USB 2.0 (port 4)
+
 DEFAULT_DEVICE_NAME = "Inconnu"
-
-# Nom du périphérique source Bluetooth (smartphone, tablette)
 BLUETOOTH_SOURCE_NAME = "Smartphone Seb"
-
-# Mode par défaut : "stereo", "left", "right"
 DEFAULT_OUTPUT_MODE = "stereo"
-
-# Fichier de cache des connexions réussies (pour reconnexion auto)
 PAIRED_DEVICES_FILE = "paired_devices.json"
