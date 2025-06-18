@@ -29,3 +29,10 @@ DIMENSIONS = {
     "slider_length": 180,
     "padding": 8
 }
+
+# Alias rétrocompatibles
+FONT_TITRE = FONTS["title"]
+FONT_STANDARD = FONTS["label"]
+COULEUR_FOND = COLORS["background_day"]
+COULEUR_BOUTON = COLORS["highlight"]
+COULEUR_TEXTE = COLORS["foreground"]
