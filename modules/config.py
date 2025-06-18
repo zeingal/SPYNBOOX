@@ -37,3 +37,5 @@ def save_config(config_data):
             json.dump(config_data, f, indent=4)
     except Exception as e:
         print(f"[SPYNBOOX] Failed to save config: {e}")
+
+from modules.config import load_global_config
