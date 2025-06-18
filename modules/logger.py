@@ -59,3 +59,17 @@ def setup_logger():
         ]
     )
     logging.info("=== SPYNBOOX DÉMARRÉ ===")
+
+
+def setup_logger():
+    """Configure le logger pour SPYNBOOX avec double sortie (console + fichier)."""
+    logging.basicConfig(
+        filename=log_filename,
+        level=logging.DEBUG,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        handlers=[
+            logging.FileHandler(log_filename),
+            logging.StreamHandler()
+        ]
+    )
+    logging.info("=== SPYNBOOX LANCÉ ===")
