@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 from modules import interface
-from modules.logging import setup_logger
+from modules.logger import setup_logger
 from modules.config import load_global_config
 from modules.rtc import init_rtc_module
 from modules.battery import check_battery_status
