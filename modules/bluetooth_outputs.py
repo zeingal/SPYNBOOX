@@ -1,5 +1,5 @@
 import subprocess
-from bluetooth_config import BLUETOOTH_DEVICES
+from modules.bluetooth_config import BLUETOOTH_DEVICES
 
 def list_bluetooth_devices():
     try:
