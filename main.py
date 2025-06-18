@@ -9,6 +9,7 @@ from modules.config import load_global_config
 from modules.rtc import init_rtc_module
 from modules.battery import check_battery_status
 from modules.update_checker import is_update_available
+from modules.update_checker import get_remote_version, is_update_available
 
 # Initialisation du système de log
 logger = setup_logger()
@@ -22,8 +23,6 @@ def main():
         logger.info("Configuration chargée.")
 
       # === Journaliser les versions locale et distante ===
-from modules.update_checker import get_remote_version, is_update_available
-
 local_version = config.get("version", "0.0.0")
 remote_version = get_remote_version()
 
