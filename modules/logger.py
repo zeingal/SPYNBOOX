@@ -35,3 +35,6 @@ def log_debug(message):
 def setup_logger():
     # Permet un appel explicite si besoin
     log_info("Logger initialisé")
+
+log = log_info
+
