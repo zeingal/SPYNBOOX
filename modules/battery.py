@@ -24,3 +24,11 @@ def get_battery_level():
     except Exception as e:
         print(f"[SPYNBOOX] Erreur inattendue : {e}")
         return None
+
+def check_battery_status():
+    """Fonction d'appel simple pour vérifier le niveau de batterie (ou désactivation)."""
+    voltage = get_battery_level()
+    if voltage is not None:
+        print(f"[SPYNBOOX] Batterie : {voltage} V")
+    else:
+        print("[SPYNBOOX] INA219 non détecté ou erreur de lecture.")
