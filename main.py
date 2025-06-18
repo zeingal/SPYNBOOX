@@ -22,7 +22,7 @@ def main():
         logger.info("Configuration chargée.")
 
       # === Journaliser les versions locale et distante ===
-from modules.update_checker import get_remote_version
+from modules.update_checker import get_remote_version, is_update_available
 
 local_version = config.get("version", "0.0.0")
 remote_version = get_remote_version()
