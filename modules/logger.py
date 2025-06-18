@@ -1,42 +1,37 @@
 import logging
-from datetime import datetime
 import os
+from datetime import datetime
 
-# === Dossier où stocker les logs ===
-LOG_FOLDER = "logs"
-if not os.path.exists(LOG_FOLDER):
-    os.makedirs(LOG_FOLDER)
+# === Création du dossier logs si nécessaire ===
+LOG_DIR = "Logs"
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
 
-# === Nom du fichier journal basé sur la date du jour ===
-today = datetime.now().strftime("%Y-%m-%d")
-log_filename = os.path.join(LOG_FOLDER, f"spynboox_{today}.log")
+# === Création du nom de fichier log basé sur la date ===
+log_filename = datetime.now().strftime("spynboox_%Y-%m-%d.log")
+log_path = os.path.join(LOG_DIR, log_filename)
 
-# === Fonction pour configurer le logger avec double sortie ===
-def setup_logger():
-    """Configure le logger pour SPYNBOOX avec double sortie (console + fichier)."""
-    logging.basicConfig(
-        level=logging.DEBUG,
-        format="%(asctime)s - %(levelname)s - %(message)s",
-        handlers=[
-            logging.FileHandler(log_filename),
-            logging.StreamHandler()
-        ]
-    )
-    logging.info("=== SPYNBOOX LANCÉ ===")
+# === Configuration du logger ===
+logging.basicConfig(
+    filename=log_path,
+    level=logging.DEBUG,
+    format="%(asctime)s — %(levelname)s — %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
 
-# === Fonctions de log pratiques ===
+# === Fonctions pratiques pour les autres modules ===
 def log_info(message):
-    print(f"[INFO] {message}")
     logging.info(message)
 
 def log_warning(message):
-    print(f"[WARN] {message}")
     logging.warning(message)
 
 def log_error(message):
-    print(f"[ERROR] {message}")
     logging.error(message)
 
 def log_debug(message):
-    print(f"[DEBUG] {message}")
     logging.debug(message)
+
+def setup_logger():
+    # Permet un appel explicite si besoin
+    log_info("Logger initialisé")
