@@ -15,7 +15,7 @@ log_path = os.path.join(LOG_DIR, log_filename)
 logging.basicConfig(
     filename=log_path,
     level=logging.DEBUG,
-    format="%(asctime)s — %(levelname)s — %(message)s",
+    format="%(asctime)s - %(levelname)s - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S"
 )
 
@@ -35,6 +35,8 @@ def log_debug(message):
 def setup_logger():
     # Permet un appel explicite si besoin
     log_info("Logger initialisé")
+    return logging  # ← Nécessaire pour pouvoir utiliser logger.info(), logger.error(), etc.
 
+# Alias pratique pour importation simplifiée
 log = log_info
 
