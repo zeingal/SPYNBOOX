@@ -46,3 +46,16 @@ def setup_logger():
         ]
     )
     logging.info("=== SPYNBOOX DÉMARRÉ ===")
+
+def setup_logger():
+    """Initialise le logger et démarre l'enregistrement dans le fichier du jour."""
+    logging.basicConfig(
+        filename=log_filename,
+        level=logging.DEBUG,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        handlers=[
+            logging.FileHandler(log_filename),
+            logging.StreamHandler()
+        ]
+    )
+    logging.info("=== SPYNBOOX DÉMARRÉ ===")
