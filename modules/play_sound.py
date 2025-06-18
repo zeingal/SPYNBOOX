@@ -4,7 +4,7 @@ import os
 import pygame
 import subprocess
 from modules.assets_manager import get_asset_path
-from modules.logging import log
+from modules.logger import log
 
 # Initialiser le mixer Pygame une seule fois
 pygame.mixer.init()
