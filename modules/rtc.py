@@ -41,3 +41,6 @@ def auto_sync_time():
         print("[INFO] Synchronisation NTP activée.")
     except Exception as e:
         print(f"[ERREUR] Impossible d’activer la synchronisation NTP : {e}")
+
+def init_rtc_module():
+    print("[SPYNBOOX] Module RTC initialisé")
