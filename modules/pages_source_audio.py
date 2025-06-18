@@ -5,10 +5,11 @@ from tkinter import filedialog
 import json
 import os
 
-from modules.widgets_config import FONT_TITRE, FONT_STANDARD, COULEUR_FOND, COULEUR_BOUTON, COULEUR_TEXTE
-from modules.pages_utils import create_title_label, create_button, create_separator
+from modules.widgets_config import FONT_TITRE, FONT_STANDARD, COULEUR_FOND, COULEUR_TEXTE
+from modules.pages_utils import create_label, create_button, create_separator
 from modules.config_manager import load_config, save_config
 
+# === Sources audio disponibles ===
 AUDIO_SOURCES = [
     {"name": "Bluetooth (entrée)", "key": "bluetooth_enabled", "icon": "🔵", "enabled": True},
     {"name": "Jack 3,5 mm", "key": "jack_enabled", "icon": "🔴", "enabled": False},
@@ -17,6 +18,7 @@ AUDIO_SOURCES = [
     {"name": "Fichier local", "key": "file_enabled", "icon": "📁", "enabled": True}
 ]
 
+# === Classe de la page source audio ===
 class SourceAudioPage:
     def __init__(self, root, show_audio_callback):
         self.root = root
@@ -32,7 +34,7 @@ class SourceAudioPage:
             widget.destroy()
         self.widgets.clear()
 
-        create_title_label(self.frame, "Sélection de la source audio").pack(pady=5)
+        create_label(self.frame, "🎚️ Sélection de la source audio", font=FONT_TITRE, fg=COULEUR_TEXTE, bg=COULEUR_FOND).pack(pady=5)
 
         selected_source = self.config.get("audio_input", {}).get("source", "Bluetooth (entrée)")
 
@@ -42,13 +44,13 @@ class SourceAudioPage:
             enabled = source["enabled"]
 
             row = tk.Frame(self.frame, bg=COULEUR_FOND)
-            row.pack(fill='x', pady=2)
+            row.pack(fill="x", pady=2)
 
-            label = tk.Label(row, text=f"{icon} {name}", font=FONT_STANDARD, fg=COULEUR_TEXTE, bg=COULEUR_FOND, anchor="w")
+            label = tk.Label(row, text=f"{icon} {name}", font=FONT_STANDARD, fg=COULEUR_TEXTE, bg=COULEUR_FOND)
             label.pack(side="left", padx=10, fill="x", expand=True)
 
             if enabled:
-                btn_text = "Choisir" if name != selected_source else "✔️ Sélectionné"
+                btn_text = "Choisir" if name != selected_source else "✓ Sélectionné"
                 button = create_button(row, btn_text, lambda s=name: self.set_source(s))
                 button.pack(side="right", padx=10)
             else:
@@ -57,8 +59,9 @@ class SourceAudioPage:
 
             self.widgets.extend([label, button, row])
 
+            # Si "Fichier local" activé
             if name == "Fichier local" and enabled:
-                browse_btn = create_button(self.frame, "📁 Choisir un fichier", self.browse_file)
+                browse_btn = create_button(self.frame, "📂 Choisir un fichier", self.browse_file)
                 browse_btn.pack(pady=4)
                 self.widgets.append(browse_btn)
 
