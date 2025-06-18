@@ -80,3 +80,29 @@ def create_equalizer_page(parent, output_name):
     Button(eq_frame, text="Enregistrer", command=save, bg="#FF6600", fg="white", padx=10).grid(row=4, column=0, columnspan=2, pady=10)
 
     return eq_frame
+
+
+def set_equalizer(band, value):
+    """Met à jour la valeur d'une bande de l'égaliseur dans le fichier de config"""
+    try:
+        with open(CONFIG_FILE, "r") as f:
+            config = json.load(f)
+        config.setdefault("equalizer", {})[band] = value
+        with open(CONFIG_FILE, "w") as f:
+            json.dump(config, f, indent=4)
+        log(f"[EQ] {band} réglé sur {value}")
+    except Exception as e:
+        log(f"[ERREUR] set_equalizer échoué : {e}")
+
+
+def reset_equalizer():
+    """Réinitialise toutes les bandes de l’égaliseur à 0"""
+    try:
+        with open(CONFIG_FILE, "r") as f:
+            config = json.load(f)
+        config["equalizer"] = {"bass": 0, "mid": 0, "treble": 0}
+        with open(CONFIG_FILE, "w") as f:
+            json.dump(config, f, indent=4)
+        log("[EQ] Égaliseur réinitialisé à 0")
+    except Exception as e:
+        log(f"[ERREUR] reset_equalizer échoué : {e}")
