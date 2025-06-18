@@ -33,3 +33,16 @@ def log_error(message):
 def log_debug(message):
     print(f"[DEBUG] {message}")
     logging.debug(message)
+
+def setup_logger():
+    """Initialise la configuration du logger."""
+    logging.basicConfig(
+        filename=log_filename,
+        level=logging.DEBUG,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        handlers=[
+            logging.FileHandler(log_filename),
+            logging.StreamHandler()
+        ]
+    )
+    logging.info("=== SPYNBOOX DÉMARRÉ ===")
