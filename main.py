@@ -21,6 +21,22 @@ def main():
         config = load_global_config()
         logger.info("Configuration chargée.")
 
+      # === Journaliser les versions locale et distante ===
+from modules.update_checker import get_remote_version
+
+local_version = config.get("version", "0.0.0")
+remote_version = get_remote_version()
+
+logger.info(f"[SPYNBOOX] Version locale détectée : {local_version}")
+if remote_version:
+    logger.info(f"[SPYNBOOX] Version distante récupérée : {remote_version}")
+    if remote_version != local_version:
+        logger.warning("[SPYNBOOX] Une mise à jour est disponible !")
+    else:
+        logger.info("[SPYNBOOX] Aucune mise à jour disponible.")
+else:
+    logger.warning("[SPYNBOOX] Impossible de récupérer la version distante.")  
+
         # Initialiser le module RTC si présent
         init_rtc_module()
 
