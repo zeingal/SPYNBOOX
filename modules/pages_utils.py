@@ -89,4 +89,9 @@ def create_slider(parent, from_=0, to=100, command=None, orient=tk.HORIZONTAL):
         font=FONT_DEFAULT,
         command=command
     )
+
+    # === Séparateur horizontal standard ===
+def create_separator(parent):
+    separator = tk.Frame(parent, height=2, bd=0, relief="flat", bg="#AAAAAA")
+    return separator
     return slider
