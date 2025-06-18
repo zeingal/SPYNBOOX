@@ -11,12 +11,7 @@ if not os.path.exists(LOG_FOLDER):
 today = datetime.now().strftime("%Y-%m-%d")
 log_filename = os.path.join(LOG_FOLDER, f"spynboox_{today}.log")
 
-# Configuration du logger
-logging.basicConfig(
-    filename=log_filename,
-    level=logging.DEBUG,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-)
+# === Fonctions de log simples ===
 
 def log_info(message):
     print(f"[INFO] {message}")
@@ -34,32 +29,7 @@ def log_debug(message):
     print(f"[DEBUG] {message}")
     logging.debug(message)
 
-def setup_logger():
-    """Initialise la configuration du logger."""
-    logging.basicConfig(
-        filename=log_filename,
-        level=logging.DEBUG,
-        format="%(asctime)s - %(levelname)s - %(message)s",
-        handlers=[
-            logging.FileHandler(log_filename),
-            logging.StreamHandler()
-        ]
-    )
-    logging.info("=== SPYNBOOX DÉMARRÉ ===")
-
-def setup_logger():
-    """Initialise le logger et démarre l'enregistrement dans le fichier du jour."""
-    logging.basicConfig(
-        filename=log_filename,
-        level=logging.DEBUG,
-        format="%(asctime)s - %(levelname)s - %(message)s",
-        handlers=[
-            logging.FileHandler(log_filename),
-            logging.StreamHandler()
-        ]
-    )
-    logging.info("=== SPYNBOOX DÉMARRÉ ===")
-
+# === Fonction de configuration du logger ===
 
 def setup_logger():
     """Configure le logger pour SPYNBOOX avec double sortie (console + fichier)."""
