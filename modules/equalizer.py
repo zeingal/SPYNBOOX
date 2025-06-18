@@ -4,7 +4,7 @@ import json
 import os
 from tkinter import Frame, Label, Scale, HORIZONTAL
 from modules.logging import log
-from modules.pages_utils import create_title_label
+from modules.pages_utils import create_label
 from modules.equalizer_config import CONFIG_FILE
 
 
