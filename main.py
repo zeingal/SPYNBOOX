@@ -16,42 +16,40 @@ def main():
     try:
         logger.info("[SPYNBOOX] Initialisation du système...")
 
-        # Charger la configuration globale
+        # Charger la configuration
         config = load_global_config()
         logger.info("Configuration chargée.")
 
-        # Vérifier les versions locale et distante
+        # Vérifier les versions
         local_version = config.get("version", "0.0.0")
         remote_version = get_remote_version()
 
-        logger.info(f"[SPYNBOOX] Version locale détectée : {local_version}")
-
+        logger.info(f"[SPYNBOOX] Version locale : {local_version}")
         if remote_version:
-            logger.info(f"[SPYNBOOX] Version distante récupérée : {remote_version}")
+            logger.info(f"[SPYNBOOX] Version distante : {remote_version}")
             if remote_version != local_version:
-                logger.warning("[SPYNBOOX] Une mise à jour est disponible !")
-
-                # Affichage d'une alerte graphique
+                logger.warning("[SPYNBOOX] Mise à jour disponible.")
+                
+                # Affichage de la fenêtre d'information
                 root = tk.Tk()
                 root.withdraw()
                 messagebox.showinfo("Mise à jour disponible", "Une nouvelle version de SPYNBOOX est disponible.")
                 root.destroy()
             else:
-                logger.info("[SPYNBOOX] Aucune mise à jour disponible.")
+                logger.info("[SPYNBOOX] Pas de mise à jour nécessaire.")
         else:
-            logger.warning("[SPYNBOOX] Impossible de récupérer la version distante.")
+            logger.warning("[SPYNBOOX] Version distante inaccessible.")
 
-        # Initialiser le module RTC si présent
+        # Initialisations techniques
         init_rtc_module()
-
-        # Vérifier l’état de la batterie (INA219)
         check_battery_status()
 
-        # Lancer l’interface principale
+        # Lancer SPYNBOOX
+        logger.info("[SPYNBOOX] Lancement de l'application principale")
         interface.run_app()
 
     except Exception as e:
-        logger.error("[SPYNBOOX] Une erreur critique est survenue :")
+        logger.error("[SPYNBOOX] Erreur critique :")
         logger.error(traceback.format_exc())
         sys.exit(1)
 
