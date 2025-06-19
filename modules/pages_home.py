@@ -12,6 +12,8 @@ def display_home_page(root, navigate_callback):
     accent = COLORS.get("accent", "#00BFFF")
     button_bg = COLORS.get("button", "#4CAF50")
     button_fg = COLORS.get("button_text", "#FFFFFF")
+    inactive_bg = "#444444"
+    inactive_fg = "#AAAAAA"
 
     # === Cadre principal ===
     main_frame = create_frame(root, bg=background)
@@ -36,12 +38,22 @@ def display_home_page(root, navigate_callback):
         ("bluetooth", "Bluetooth", "📡"),
         ("settings", "Paramètres", "⚙️"),
         ("shutdown", "Éteindre", "⏻"),
-        ("none", "", "")  # bouton vide pour équilibre visuel
+        ("inactive", "À venir", "🛠️")  # bouton inactif
     ]
 
     for index, (page_name, label, emoji) in enumerate(buttons):
         row, col = divmod(index, 2)
-        if page_name != "none":
+
+        if page_name == "inactive":
+            btn = tk.Button(
+                grid_frame,
+                text=f"{emoji} {label}",
+                state="disabled",
+                bg=inactive_bg,
+                fg=inactive_fg,
+                font=FONTS.get("button", ("Arial", 12))
+            )
+        else:
             btn = create_button(
                 grid_frame,
                 text=f"{emoji} {label}",
@@ -50,7 +62,5 @@ def display_home_page(root, navigate_callback):
                 fg=button_fg,
                 font=FONTS.get("button", ("Arial", 12))
             )
-        else:
-            btn = tk.Label(grid_frame, text="", bg=background)
 
         btn.grid(row=row, column=col, padx=10, pady=10, ipadx=10, ipady=5)
