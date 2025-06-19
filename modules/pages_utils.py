@@ -2,13 +2,12 @@ import tkinter as tk
 
 # === Paramètres graphiques globaux ===
 FONT_DEFAULT = ("Bungee", 12)
-COLOR_BUTTON = "#FF6600"  # Orange
+COLOR_BUTTON = "#FF6600"           # Orange
 COLOR_BUTTON_TEXT = "white"
 COLOR_LABEL = "#333333"
 COLOR_BACKGROUND = "#F0F0F0"
 COLOR_SLIDER = "#FF6600"
 SLIDER_LENGTH = 200
-
 
 # === Bouton stylisé ===
 def create_button(parent, text, command=None, width=15):
@@ -25,7 +24,6 @@ def create_button(parent, text, command=None, width=15):
         width=width
     )
 
-
 # === Label stylisé ===
 def create_label(parent, text, font=FONT_DEFAULT, fg=COLOR_LABEL, bg=COLOR_BACKGROUND):
     return tk.Label(
@@ -36,14 +34,13 @@ def create_label(parent, text, font=FONT_DEFAULT, fg=COLOR_LABEL, bg=COLOR_BACKG
         bg=bg
     )
 
-
 # === Slider avec étiquette centrée ===
 def create_labeled_slider(parent, label_text, from_, to, command=None):
     frame = tk.Frame(parent, bg=COLOR_BACKGROUND)
     
     label = create_label(frame, label_text)
     label.pack(pady=(0, 5))
-
+    
     slider = tk.Scale(
         frame,
         from_=from_,
@@ -64,11 +61,9 @@ def create_labeled_slider(parent, label_text, from_, to, command=None):
 
     return frame, slider
 
-
 # === Cadre standard pour page ou section ===
-def create_frame(parent, padding=10):
-    return tk.Frame(parent, bg=COLOR_BACKGROUND, padx=padding, pady=padding)
-
+def create_frame(parent, padding=10, bg=None):
+    return tk.Frame(parent, bg=bg or COLOR_BACKGROUND, padx=padding, pady=padding)
 
 # === Bouton Retour standard ===
 def create_back_button(parent, command=None):
@@ -89,9 +84,9 @@ def create_slider(parent, from_=0, to=100, command=None, orient=tk.HORIZONTAL):
         font=FONT_DEFAULT,
         command=command
     )
+    return slider
 
-    # === Séparateur horizontal standard ===
+# === Séparateur horizontal standard ===
 def create_separator(parent):
     separator = tk.Frame(parent, height=2, bd=0, relief="flat", bg="#AAAAAA")
     return separator
-    return slider
