@@ -14,7 +14,7 @@ def display_home_page(root, navigate_callback):
     button_fg = COLORS.get("button_text", "#FFFFFF")
 
     # Cadre principal
-    main_frame = create_frame(root, bg=background)
+    main_frame = create_frame(root, bg="#202020")  # au lieu de COLORS["background"]
     main_frame.pack(expand=True, fill="both")
 
     # Titre
