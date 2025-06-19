@@ -50,6 +50,7 @@ def run_app():
 
         # Animation + lancement
         # start_animation.play_start_animation(root, launch_main_page)
+        logger.info("[SPYNBOOX] Lancement direct de la page d'accueil sans animation")
         launch_main_page()
         root.mainloop()
 
