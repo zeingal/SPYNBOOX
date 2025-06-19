@@ -27,7 +27,7 @@ def display_home_page(root, navigate_callback):
     ).pack(pady=10)
 
     # Cadre pour grille de boutons
-    grid_frame = tk.Frame(main_frame, bg=background)
+    grid_frame = tk.Frame(main_frame, bg="#202020")
     grid_frame.pack(pady=10)
 
     # Boutons à afficher (page, label, emoji)
