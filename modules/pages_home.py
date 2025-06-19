@@ -1,42 +1,42 @@
 
-import modules.theme_manager as theme_manager
 import tkinter as tk
 from modules.pages_utils import create_button, create_label, create_frame
-from modules.widgets_config import FONTS
+from modules.widgets_config import COLORS, FONTS
 
 def display_home_page(root, navigate_callback):
-    # Efface les widgets précédents
+    # Nettoyage de la fenêtre
     for widget in root.winfo_children():
         widget.destroy()
 
-    # Cadre principal centré
-    main_frame = create_frame(root, bg=theme_manager.COLORS["background"])
-    main_frame.pack(expand=True)
+    # Cadre principal
+    main_frame = create_frame(root, bg=COLORS["background"])
+    main_frame.pack(expand=True, fill="both")
 
-    # Titre
+    # Titre SPYNBOOX
     create_label(
         main_frame,
         text="SPYNBOOX",
         font=FONTS["title"],
-        fg=theme_manager.COLORS["accent"],
-        bg=theme_manager.COLORS["background"]
+        fg=COLORS["accent"],
+        bg=COLORS["background"]
     ).pack(pady=20)
 
-    # Boutons de navigation
-    buttons_info = [
-        ("🎧 Audio", lambda: navigate_callback("audio")),
-        ("🎚 Égaliseur", lambda: navigate_callback("equalizer")),
-        ("🛰 Bluetooth", lambda: navigate_callback("bluetooth")),
-        ("⚙️ Paramètres", lambda: navigate_callback("settings")),
-        ("⏻ Éteindre", lambda: navigate_callback("shutdown"))
+    # Liste des boutons à afficher (page_name, texte, emoji)
+    buttons = [
+        ("audio", "Audio", "🎧"),
+        ("equalizer", "Égaliseur", "🎚️"),
+        ("bluetooth", "Bluetooth", "📡"),
+        ("settings", "Paramètres", "⚙️"),
+        ("shutdown", "Éteindre", "⏻")
     ]
 
-    for text, command in buttons_info:
+    # Création des boutons avec espacement régulier
+    for page_name, label, emoji in buttons:
         create_button(
             main_frame,
-            text=text,
-            command=command,
-            bg=theme_manager.COLORS["button"],
-            fg=theme_manager.COLORS["button_text"],
+            text=f"{emoji} {label}",
+            command=lambda p=page_name: navigate_callback(p),
+            bg=COLORS["button"],
+            fg=COLORS["button_text"],
             font=FONTS["button"]
-        ).pack(pady=10, ipadx=10, ipady=5)
+        ).pack(pady=8)
