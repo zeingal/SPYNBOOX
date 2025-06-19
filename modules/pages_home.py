@@ -1,4 +1,4 @@
-from modules.theme_manager import COLORS
+import modules.theme_manager as theme_manager
 import tkinter as tk
 from modules.pages_utils import create_button, create_label, create_frame
 from modules.widgets_config import COLORS, FONTS
@@ -9,7 +9,7 @@ def display_home_page(root, navigate_callback):
         widget.destroy()
 
     # Cadre principal centré
-    main_frame = create_frame(root, bg=COLORS["background"])
+    main_frame = create_frame(root, bg=theme_manager.COLORS["background"]
     main_frame.pack(expand=True)
 
     # Titre
