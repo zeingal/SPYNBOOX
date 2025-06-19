@@ -1,33 +1,21 @@
-import tkinter as tk
-from modules import (
-    start_animation,
-    theme_manager,
-    display,
-    pages_home,
-    toast,
-    navigator,
-    system,
-    rtc
-)
-from modules.logger import setup_logger
-
-logger = setup_logger()
-
 def run_app():
     try:
         logger.info("[SPYNBOOX] Lancement de l'application")
 
         # Initialisation de la fenêtre principale
         root = tk.Tk()
+        logger.info("[SPYNBOOX] Fenêtre principale créée")
         root.title("SPYNBOOX")
         root.geometry("480x320")
         root.configure(bg="black")
         root.attributes("-fullscreen", True)
 
         # Application du thème
+        logger.info("[SPYNBOOX] Application du thème...")
         theme_manager.apply_theme(root)
 
         # Luminosité initiale
+        logger.info("[SPYNBOOX] Réglage de la luminosité...")
         display.set_brightness_from_config()
 
         # Lancement après animation
@@ -37,6 +25,7 @@ def run_app():
 
         # Navigation avec hooks
         def navigate_callback(page_name):
+            logger.info(f"[SPYNBOOX] Navigation vers : {page_name}")
             navigator.navigate_to(
                 page_name,
                 root,
@@ -49,12 +38,11 @@ def run_app():
             )
 
         # Animation + lancement
-        # start_animation.play_start_animation(root, launch_main_page)
         logger.info("[SPYNBOOX] Lancement direct de la page d'accueil sans animation")
         launch_main_page()
-        root.mainloop()
 
-        
+        logger.info("[SPYNBOOX] Démarrage de la boucle principale Tkinter")
+        root.mainloop()
 
     except Exception as e:
         logger.error(f"[SPYNBOOX] Erreur critique dans l'application : {e}")
