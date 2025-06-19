@@ -1,15 +1,13 @@
 import tkinter as tk
-from modules import theme_manager
 
-# === Paramètres graphiques par défaut ===
+# === Paramètres graphiques globaux ===
 FONT_DEFAULT = ("Bungee", 12)
 COLOR_BUTTON = "#4CAF50"
-COLOR_BUTTON_TEXT = "#FFFFFF"
+COLOR_BUTTON_TEXT = "white"
 COLOR_LABEL = "#333333"
 COLOR_BACKGROUND = "#F0F0F0"
 COLOR_SLIDER = "#FF6600"
 SLIDER_LENGTH = 200
-SLIDER_HEIGHT = 30  # Nouvelle hauteur visible
 
 # === Bouton stylisé ===
 def create_button(parent, text, command=None, width=15, bg=None, fg=None, font=None):
@@ -17,39 +15,34 @@ def create_button(parent, text, command=None, width=15, bg=None, fg=None, font=N
         parent,
         text=text,
         command=command,
+        width=width,
+        bg=bg if bg else COLOR_BUTTON,
+        fg=fg if fg else COLOR_BUTTON_TEXT,
         font=font if font else FONT_DEFAULT,
-        bg=bg if bg else theme_manager.COLORS.get("button", COLOR_BUTTON),
-        fg=fg if fg else theme_manager.COLORS.get("button_text", COLOR_BUTTON_TEXT),
         activebackground="#cc5200",
         relief="raised",
         bd=2,
-        width=width
     )
 
 # === Label stylisé ===
-def create_label(parent, text, font=FONT_DEFAULT, fg=None, bg=None):
+def create_label(parent, text, font=FONT_DEFAULT, fg=COLOR_LABEL, bg=COLOR_BACKGROUND):
     return tk.Label(
         parent,
         text=text,
         font=font,
-        fg=fg if fg else theme_manager.COLORS.get("foreground", COLOR_LABEL),
-        bg=bg if bg else theme_manager.COLORS.get("background", COLOR_BACKGROUND)
+        fg=fg,
+        bg=bg
     )
 
-# === Frame centrée ===
+# === Frame avec fond personnalisé ===
 def create_frame(parent, padding=10, bg=None):
-    return tk.Frame(
-        parent,
-        bg=bg if bg else theme_manager.COLORS.get("background", COLOR_BACKGROUND),
-        padx=padding,
-        pady=padding
-    )
+    return tk.Frame(parent, bg=bg or COLOR_BACKGROUND, padx=padding, pady=padding)
 
-# === Bouton retour standard ===
+# === Bouton Retour standard ===
 def create_back_button(parent, command=None):
     return create_button(parent, "Retour", command=command, width=10)
 
-# === Slider simple ===
+# === Slider simple sans étiquette ===
 def create_slider(parent, from_=0, to=100, command=None, orient=tk.HORIZONTAL):
     slider = tk.Scale(
         parent,
@@ -57,16 +50,29 @@ def create_slider(parent, from_=0, to=100, command=None, orient=tk.HORIZONTAL):
         to=to,
         orient=orient,
         length=SLIDER_LENGTH,
-        fg=theme_manager.COLORS.get("foreground", COLOR_LABEL),
-        bg=theme_manager.COLORS.get("background", COLOR_BACKGROUND),
+        fg=COLOR_LABEL,
+        bg=COLOR_BACKGROUND,
         troughcolor="#DDDDDD",
-        activebackground=theme_manager.COLORS.get("highlight", COLOR_SLIDER),
+        activebackground=COLOR_SLIDER,
         font=FONT_DEFAULT,
         command=command,
-        sliderlength=SLIDER_HEIGHT  # 🔧 Plus épais
+        sliderlength=20  # ✅ plus large
     )
     return slider
 
-# === Séparateur horizontal ===
+# === Slider avec étiquette centrée ===
+def create_labeled_slider(parent, label_text, from_, to, command=None):
+    frame = tk.Frame(parent, bg=COLOR_BACKGROUND)
+
+    label = create_label(frame, label_text)
+    label.pack(pady=(0, 5))
+
+    slider = create_slider(frame, from_=from_, to=to, command=command)
+    slider.pack()
+
+    return frame
+
+# === Séparateur horizontal standard ===
 def create_separator(parent):
-    return tk.Frame(parent, height=2, bd=0, relief="flat", bg="#AAAAAA")
+    separator = tk.Frame(parent, height=2, bd=0, relief="flat", bg="#AAAAAA")
+    return separator
