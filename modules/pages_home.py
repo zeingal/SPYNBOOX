@@ -9,7 +9,7 @@ def display_home_page(root, navigate_callback):
         widget.destroy()
 
     # Cadre principal centré
-    main_frame = create_frame(root, bg=theme_manager.COLORS["background"]
+    main_frame = create_frame(root, bg=theme_manager.COLORS["background"])
     main_frame.pack(expand=True)
 
     # Titre
