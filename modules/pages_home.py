@@ -1,7 +1,8 @@
+
 import modules.theme_manager as theme_manager
 import tkinter as tk
 from modules.pages_utils import create_button, create_label, create_frame
-from modules.widgets_config import COLORS, FONTS
+from modules.widgets_config import FONTS
 
 def display_home_page(root, navigate_callback):
     # Efface les widgets précédents
@@ -17,15 +18,15 @@ def display_home_page(root, navigate_callback):
         main_frame,
         text="SPYNBOOX",
         font=FONTS["title"],
-        fg=COLORS["accent"],
-        bg=COLORS["background"]
+        fg=theme_manager.COLORS["accent"],
+        bg=theme_manager.COLORS["background"]
     ).pack(pady=20)
 
     # Boutons de navigation
     buttons_info = [
-        ("🔊 Audio", lambda: navigate_callback("audio")),
-        ("🎚️ Égaliseur", lambda: navigate_callback("equalizer")),
-        ("📡 Bluetooth", lambda: navigate_callback("bluetooth")),
+        ("🎧 Audio", lambda: navigate_callback("audio")),
+        ("🎚 Égaliseur", lambda: navigate_callback("equalizer")),
+        ("🛰 Bluetooth", lambda: navigate_callback("bluetooth")),
         ("⚙️ Paramètres", lambda: navigate_callback("settings")),
         ("⏻ Éteindre", lambda: navigate_callback("shutdown"))
     ]
@@ -35,7 +36,7 @@ def display_home_page(root, navigate_callback):
             main_frame,
             text=text,
             command=command,
-            bg=COLORS["button"],
-            fg=COLORS["button_text"],
+            bg=theme_manager.COLORS["button"],
+            fg=theme_manager.COLORS["button_text"],
             font=FONTS["button"]
         ).pack(pady=10, ipadx=10, ipady=5)
