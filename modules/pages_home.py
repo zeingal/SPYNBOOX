@@ -7,54 +7,50 @@ def display_home_page(root, navigate_callback):
     for widget in root.winfo_children():
         widget.destroy()
 
-    # Sécurité sur les couleurs
-    background = COLORS.get("background", "#FFFFFF")
-    accent = COLORS.get("accent", "#000000")
+    # === Sécurisation des couleurs ===
+    background = COLORS.get("background", "#000000")
+    accent = COLORS.get("accent", "#00BFFF")
     button_bg = COLORS.get("button", "#4CAF50")
     button_fg = COLORS.get("button_text", "#FFFFFF")
 
-    # Cadre principal
-    main_frame = create_frame(root, bg="#202020")  # au lieu de COLORS["background"]
+    # === Cadre principal ===
+    main_frame = create_frame(root, bg=background)
     main_frame.pack(expand=True, fill="both")
 
-    # Titre
+    # === Titre ===
     create_label(
         main_frame,
         text="SPYNBOOX",
-        font=FONTS["title"],
+        font=FONTS.get("title", ("Arial", 20, "bold")),
         fg=accent,
         bg=background
     ).pack(pady=10)
 
-    # Cadre pour grille de boutons
-    grid_frame = tk.Frame(main_frame, bg="#202020")
-    grid_frame.pack(pady=10)
+    # === Grille de boutons ===
+    grid_frame = tk.Frame(main_frame, bg=background)
+    grid_frame.pack(expand=True)
 
-    # Boutons à afficher (page, label, emoji)
     buttons = [
         ("audio", "Audio", "🎧"),
         ("equalizer", "Égaliseur", "🎚️"),
         ("bluetooth", "Bluetooth", "📡"),
         ("settings", "Paramètres", "⚙️"),
         ("shutdown", "Éteindre", "⏻"),
-        (None, "", "")  # Case vide pour équilibrer
+        ("none", "", "")  # bouton vide pour équilibre visuel
     ]
 
-    # Affichage en grille 2x3
     for index, (page_name, label, emoji) in enumerate(buttons):
-        row = index // 2
-        col = index % 2
-        if page_name:
+        row, col = divmod(index, 2)
+        if page_name != "none":
             btn = create_button(
                 grid_frame,
                 text=f"{emoji} {label}",
                 command=lambda p=page_name: navigate_callback(p),
                 bg=button_bg,
                 fg=button_fg,
-                font=FONTS["button"]
+                font=FONTS.get("button", ("Arial", 12))
             )
         else:
-            # Bouton inactif invisible mais occupe l’espace
             btn = tk.Label(grid_frame, text="", bg=background)
 
         btn.grid(row=row, column=col, padx=10, pady=10, ipadx=10, ipady=5)
