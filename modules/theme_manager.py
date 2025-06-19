@@ -7,12 +7,14 @@ THEMES = {
         "foreground": "#000000",
         "button_color": "#4CAF50",  # Vert olive
         "highlight": "#FF6600",     # Orange
+        "accent": "#0066CC"         # 🔵 Bleu ou autre couleur d’accent
     },
     "night": {
-        "background": "#556B2F",    # Vert olive foncé
+        "background": "#556B2F",     # Vert olive foncé
         "foreground": "#FFFFFF",
         "button_color": "#FF6600",
-        "highlight": "#FFD700",     # Or
+        "highlight": "#FFD700",      # Or
+        "accent": "#3399FF"          # 🔵 Bleu plus clair pour le mode nuit
     }
 }
 
