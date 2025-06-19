@@ -49,8 +49,8 @@ def run_app():
             )
 
         # Animation + lancement
-        start_animation.play_start_animation(root, launch_main_page)
-        root.mainloop()
+    # start_animation.play_start_animation(root, launch_main_page)
+launch_main_page()
 
     except Exception as e:
         logger.error(f"[SPYNBOOX] Erreur critique dans l'application : {e}")
