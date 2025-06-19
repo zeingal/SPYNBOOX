@@ -2,8 +2,8 @@ import tkinter as tk
 
 # === Paramètres graphiques globaux ===
 FONT_DEFAULT = ("Bungee", 12)
-COLOR_BUTTON = "#FF6600"           # Orange
-COLOR_BUTTON_TEXT = "white"
+COLOR_BUTTON = "#4CAF50"           # Vert olive
+COLOR_BUTTON_TEXT = "#FFFFFF"
 COLOR_LABEL = "#333333"
 COLOR_BACKGROUND = "#F0F0F0"
 COLOR_SLIDER = "#FF6600"
@@ -47,7 +47,7 @@ def create_labeled_slider(parent, label_text, from_, to, command=None):
         to=to,
         orient="vertical",
         length=SLIDER_LENGTH,
-        sliderlength=15,
+        sliderlength=30,  # 🔧 Slider plus visible
         showvalue=True,
         tickinterval=(to - from_) // 2,
         fg=COLOR_LABEL,
@@ -77,6 +77,7 @@ def create_slider(parent, from_=0, to=100, command=None, orient=tk.HORIZONTAL):
         to=to,
         orient=orient,
         length=SLIDER_LENGTH,
+        sliderlength=30,  # 🔧 Correction importante ici aussi
         fg=COLOR_LABEL,
         bg=COLOR_BACKGROUND,
         troughcolor="#DDDDDD",
