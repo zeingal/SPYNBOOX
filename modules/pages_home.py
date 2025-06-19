@@ -1,4 +1,3 @@
-
 import tkinter as tk
 from modules.pages_utils import create_button, create_label, create_frame
 from modules.widgets_config import COLORS, FONTS
@@ -8,17 +7,17 @@ def display_home_page(root, navigate_callback):
     for widget in root.winfo_children():
         widget.destroy()
 
-    # === Sécurisation des couleurs ===
-    background = COLORS.get("background", "#000000")      # fond noir par défaut
-    accent = COLORS.get("accent", "#00BFFF")              # bleu par défaut
-    button_bg = COLORS.get("button", "#4CAF50")           # vert
-    button_fg = COLORS.get("button_text", "#FFFFFF")      # blanc
+    # === Couleurs sécurisées ===
+    background = COLORS.get("background", "#000000")
+    accent = COLORS.get("accent", "#00BFFF")
+    button_bg = COLORS.get("button", "#4CAF50")
+    button_fg = COLORS.get("button_text", "#FFFFFF")
 
     # Cadre principal
     main_frame = create_frame(root, bg=background)
     main_frame.pack(expand=True, fill="both")
 
-    # Titre SPYNBOOX
+    # Titre
     create_label(
         main_frame,
         text="SPYNBOOX",
@@ -27,35 +26,36 @@ def display_home_page(root, navigate_callback):
         bg=background
     ).pack(pady=20)
 
-    # Cadre pour grille de boutons
+    # Cadre pour les boutons
     grid_frame = tk.Frame(main_frame, bg=background)
     grid_frame.pack()
 
-    # Liste des boutons à afficher (6 éléments pour 3x2)
+    # Liste des boutons
     buttons = [
         ("audio",      "Audio",       "🎧"),
         ("equalizer",  "Égaliseur",   "🎚️"),
         ("bluetooth",  "Bluetooth",   "📡"),
         ("settings",   "Paramètres",  "⚙️"),
         ("shutdown",   "Éteindre",    "⏻"),
-        ("placeholder", "", "")  # bouton vide, esthétique
+        ("inactive",   "xxxxx",       "")  # faux bouton esthétique
     ]
 
-    # Création en grille 2 colonnes
     for index, (page_name, label, emoji) in enumerate(buttons):
         row = index // 2
         col = index % 2
 
-        if page_name == "placeholder":
-            # Faux bouton vide mais même taille
-            btn = tk.Label(
+        if page_name == "inactive":
+            # Bouton désactivé avec texte invisible (vert sur vert)
+            btn = tk.Button(
                 grid_frame,
-                text="",
+                text=label,
                 bg=button_bg,
-                width=16,
-                height=2,
+                fg=button_bg,
+                font=FONTS.get("button", ("Arial", 12)),
+                state="disabled",
                 relief="raised",
-                bd=2
+                width=16,
+                height=2
             )
         else:
             btn = create_button(
