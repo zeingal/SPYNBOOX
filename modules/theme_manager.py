@@ -26,6 +26,8 @@ def get_current_theme():
         return THEMES["day"]
 
 def apply_theme(widget, theme_data):
+    global COLORS
+    COLORS = theme_data  # stocke les couleurs en global
     try:
         widget.configure(bg=theme_data["background"])
         for child in widget.winfo_children():
