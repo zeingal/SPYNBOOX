@@ -1,3 +1,4 @@
+from modules.theme_manager import COLORS
 import tkinter as tk
 from modules.pages_utils import create_button, create_label, create_frame
 from modules.widgets_config import COLORS, FONTS
