@@ -10,14 +10,14 @@ COLOR_SLIDER = "#FF6600"
 SLIDER_LENGTH = 200
 
 # === Bouton stylisé ===
-def create_button(parent, text, command=None, width=15):
+def create_button(parent, text, command=None, width=15, bg=None, fg=None, font=None):
     return tk.Button(
         parent,
         text=text,
         command=command,
-        font=FONT_DEFAULT,
-        bg=COLOR_BUTTON,
-        fg=COLOR_BUTTON_TEXT,
+        font=font if font else FONT_DEFAULT,
+        bg=bg if bg else COLOR_BUTTON,
+        fg=fg if fg else COLOR_BUTTON_TEXT,
         activebackground="#cc5200",
         relief="raised",
         bd=2,
@@ -37,10 +37,10 @@ def create_label(parent, text, font=FONT_DEFAULT, fg=COLOR_LABEL, bg=COLOR_BACKG
 # === Slider avec étiquette centrée ===
 def create_labeled_slider(parent, label_text, from_, to, command=None):
     frame = tk.Frame(parent, bg=COLOR_BACKGROUND)
-    
+
     label = create_label(frame, label_text)
     label.pack(pady=(0, 5))
-    
+
     slider = tk.Scale(
         frame,
         from_=from_,
