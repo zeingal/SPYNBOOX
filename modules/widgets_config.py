@@ -4,9 +4,13 @@
 
 # Couleurs
 COLORS = {
+    "background": "black",              # Fond général
+    "accent": "#00FFFF",                # Texte clair sur fond foncé
+    "button": "green",                  # Fond bouton principal
+    "button_text": "white",             # Texte sur bouton
+    "return": "#333333",                # Bouton retour
     "background_day": "#FFFFFF",
     "background_night": "#3C3F41",
-    "background": "#000000",  # ou "#3C3F41" si tu veux le mode nuit par défaut
     "foreground": "#000000",
     "highlight": "#FF6600",
     "button_bg": "#CCCCCC",
