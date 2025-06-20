@@ -1,3 +1,4 @@
+
 import tkinter as tk
 import random
 
@@ -18,13 +19,13 @@ def create_audio_page(root, navigate_callback):
     for widget in root.winfo_children():
         widget.destroy()
 
-    bg = COLORS.get("background", "#000000")
-    accent = COLORS.get("accent", "#00FFFF")
+    background = COLORS.get("background", "black")
     button_bg = COLORS.get("button", "#4CAF50")
-    button_fg = COLORS.get("button_text", "#FFFFFF")
-    return_bg = COLORS.get("return", "#888888")
+    button_fg = COLORS.get("button_text", "white")
+    accent = COLORS.get("accent", "cyan")
+    return_bg = COLORS.get("return", "gray")
 
-    main_frame = create_frame(root, bg=bg)
+    main_frame = create_frame(root, bg=background)
     main_frame.pack(expand=True, fill="both")
 
     create_label(
@@ -32,10 +33,11 @@ def create_audio_page(root, navigate_callback):
         text="Contrôle Audio",
         font=FONTS["title"],
         fg=accent,
-        bg=bg
+        bg=background
     ).pack(pady=5)
 
-    playback_frame = create_frame(main_frame, bg=bg)
+    # Zone de lecture
+    playback_frame = create_frame(main_frame, bg=background)
     playback_frame.pack(pady=2)
 
     def open_source_page():
@@ -71,7 +73,7 @@ def create_audio_page(root, navigate_callback):
         length=100,
         state="disabled",
         sliderlength=10,
-        bg=bg,
+        bg=background,
         highlightthickness=0,
         troughcolor="#333333",
         fg=accent
@@ -97,7 +99,7 @@ def create_audio_page(root, navigate_callback):
 
     update_vumeter()
 
-    # 3 lignes de contrôles pour 3 sorties Bluetooth
+    # Sorties Bluetooth
     for output_index in range(1, 4):
         create_output_controls(main_frame, output_index, navigate_callback)
 
@@ -110,14 +112,12 @@ def create_audio_page(root, navigate_callback):
         font=FONTS["button"]
     ).pack(pady=5)
 
-
 def create_output_controls(parent, output_index, navigate_callback):
-    bg = COLORS.get("background", "#000000")
+    background = COLORS.get("background", "black")
     button_bg = COLORS.get("button", "#4CAF50")
-    button_fg = COLORS.get("button_text", "#FFFFFF")
-    mini_font = FONTS["mini"]
+    button_fg = COLORS.get("button_text", "white")
 
-    frame = create_frame(parent, bg=bg)
+    frame = create_frame(parent, bg=background)
     frame.pack(pady=5, fill="x", padx=5)
 
     connected = is_output_connected(output_index)
@@ -126,11 +126,11 @@ def create_output_controls(parent, output_index, navigate_callback):
     create_button(
         frame,
         text="Appairer",
-        fg="white",
+        command=lambda: pair_device_to_output(output_index),
         bg=pair_color,
+        fg="white",
         font=FONTS["button"],
-        width=8,
-        command=lambda: pair_device_to_output(output_index)
+        width=12
     ).pack(side="left", padx=2)
 
     create_slider(
@@ -138,8 +138,8 @@ def create_output_controls(parent, output_index, navigate_callback):
         from_=0,
         to=100,
         initial=50,
-        length=100,
-        command=lambda val: print(f"[SPYNBOOX] Volume sortie {output_index} : {val}")
+        command=lambda val: print(f"[SPYNBOOX] Volume sortie {output_index} : {val}"),
+        length=100
     ).pack(side="left", padx=5)
 
     create_button(
@@ -148,7 +148,7 @@ def create_output_controls(parent, output_index, navigate_callback):
         command=lambda: create_equalizer_page(parent, navigate_callback, output_index),
         bg=button_bg,
         fg=button_fg,
-        font=mini_font
+        font=FONTS["mini"]
     ).pack(side="left", padx=2)
 
     config = load_config()
@@ -160,7 +160,7 @@ def create_output_controls(parent, output_index, navigate_callback):
         command=lambda: create_mode_selection_page(parent, navigate_callback, output_index),
         bg=button_bg,
         fg=button_fg,
-        font=mini_font
+        font=FONTS["mini"]
     ).pack(side="left", padx=2)
 
     create_button(
@@ -169,5 +169,5 @@ def create_output_controls(parent, output_index, navigate_callback):
         command=lambda: play_sound_file(TEST_SOUND_PATH, output_index),
         bg=button_bg,
         fg=button_fg,
-        font=mini_font
+        font=FONTS["mini"]
     ).pack(side="left", padx=2)
