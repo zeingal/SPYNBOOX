@@ -7,7 +7,7 @@ def display_home_page(root, navigate_callback):
     for widget in root.winfo_children():
         widget.destroy()
 
-    # === Couleurs sécurisées ===
+    # === Couleurs ===
     background = COLORS.get("background", "#000000")
     accent = COLORS.get("accent", "#00BFFF")
     button_bg = COLORS.get("button", "#4CAF50")
@@ -26,7 +26,7 @@ def display_home_page(root, navigate_callback):
         bg=background
     ).pack(pady=20)
 
-    # Cadre pour les boutons
+    # Grille de boutons
     grid_frame = tk.Frame(main_frame, bg=background)
     grid_frame.pack()
 
@@ -37,7 +37,7 @@ def display_home_page(root, navigate_callback):
         ("bluetooth",  "Bluetooth",   "📡"),
         ("settings",   "Paramètres",  "⚙️"),
         ("shutdown",   "Éteindre",    "⏻"),
-        ("inactive",   "xxxxx",       "")  # faux bouton esthétique
+        ("inactive",   "",            "")  # faux bouton vide
     ]
 
     for index, (page_name, label, emoji) in enumerate(buttons):
@@ -45,26 +45,26 @@ def display_home_page(root, navigate_callback):
         col = index % 2
 
         if page_name == "inactive":
-            # Bouton désactivé avec texte invisible (vert sur vert)
             btn = tk.Button(
                 grid_frame,
-                text=label,
+                text="",
                 bg=button_bg,
-                fg=button_bg,
-                font=FONTS.get("button", ("Arial", 12)),
                 state="disabled",
                 relief="raised",
                 width=16,
                 height=2
             )
         else:
-            btn = create_button(
+            btn = tk.Button(
                 grid_frame,
                 text=f"{emoji} {label}",
                 command=lambda p=page_name: navigate_callback(p),
                 bg=button_bg,
                 fg=button_fg,
-                font=FONTS.get("button", ("Arial", 12))
+                font=FONTS.get("button", ("Arial", 12)),
+                relief="raised",
+                width=16,
+                height=2
             )
 
         btn.grid(row=row, column=col, padx=20, pady=10)
