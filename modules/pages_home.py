@@ -7,7 +7,7 @@ def display_home_page(root, navigate_callback):
     for widget in root.winfo_children():
         widget.destroy()
 
-    # === Couleurs ===
+    # === Couleurs avec fallback ===
     background = COLORS.get("background", "#000000")
     accent = COLORS.get("accent", "#00BFFF")
     button_bg = COLORS.get("button", "#4CAF50")
@@ -30,14 +30,14 @@ def display_home_page(root, navigate_callback):
     grid_frame = tk.Frame(main_frame, bg=background)
     grid_frame.pack()
 
-    # Liste des boutons
+    # Liste des boutons (6 = 2 colonnes x 3 lignes)
     buttons = [
-        ("audio",      "Audio",       "🎧"),
-        ("equalizer",  "Égaliseur",   "🎚️"),
-        ("bluetooth",  "Bluetooth",   "📡"),
-        ("settings",   "Paramètres",  "⚙️"),
-        ("shutdown",   "Éteindre",    "⏻"),
-        ("inactive",   "",            "")  # faux bouton vide
+        ("audio",     "Audio",      "🎧"),
+        ("equalizer", "Égaliseur",  "🎚️"),
+        ("bluetooth", "Bluetooth",  "📡"),
+        ("settings",  "Paramètres", "⚙️"),
+        ("shutdown",  "Éteindre",   "⏻"),
+        ("inactive",  "",           "")  # Faux bouton esthétique
     ]
 
     for index, (page_name, label, emoji) in enumerate(buttons):
@@ -45,6 +45,7 @@ def display_home_page(root, navigate_callback):
         col = index % 2
 
         if page_name == "inactive":
+            # Faux bouton : même apparence, désactivé
             btn = tk.Button(
                 grid_frame,
                 text="",
@@ -52,7 +53,8 @@ def display_home_page(root, navigate_callback):
                 state="disabled",
                 relief="raised",
                 width=16,
-                height=2
+                height=1,
+                bd=3
             )
         else:
             btn = tk.Button(
@@ -61,10 +63,11 @@ def display_home_page(root, navigate_callback):
                 command=lambda p=page_name: navigate_callback(p),
                 bg=button_bg,
                 fg=button_fg,
-                font=FONTS.get("button", ("Arial", 12)),
+                font=FONTS.get("button", ("Arial", 12, "bold")),
                 relief="raised",
                 width=16,
-                height=2
+                height=1,
+                bd=3
             )
 
         btn.grid(row=row, column=col, padx=20, pady=10)
