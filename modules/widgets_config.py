@@ -6,6 +6,7 @@
 COLORS = {
     "background_day": "#FFFFFF",
     "background_night": "#3C3F41",
+    "background": "#000000",  # ou "#3C3F41" si tu veux le mode nuit par défaut
     "foreground": "#000000",
     "highlight": "#FF6600",
     "button_bg": "#CCCCCC",
