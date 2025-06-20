@@ -2,13 +2,7 @@
 
 # Configuration graphique des widgets de l'interface
 
-# Couleurs
 COLORS = {
-    "background": "black",              # Fond général
-    "accent": "#00FFFF",                # Texte clair sur fond foncé
-    "button": "green",                  # Fond bouton principal
-    "button_text": "white",             # Texte sur bouton
-    "return": "#333333",                # Bouton retour
     "background_day": "#FFFFFF",
     "background_night": "#3C3F41",
     "foreground": "#000000",
@@ -17,7 +11,16 @@ COLORS = {
     "button_fg": "#000000",
     "slider_trough": "#EEEEEE",
     "slider_thumb": "#FF6600",
-    "green_olive": "#708238"
+    "green_olive": "#708238",
+
+    # Clés critiques pour pages_audio.py
+    "background": "black",
+    "accent": "#00FFFF",
+    "button": "green",
+    "button_text": "white",
+    "return": "#333333",
+    "green": "green",
+    "red": "red"
 }
 
 # Polices
